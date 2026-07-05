@@ -35,7 +35,7 @@ You are the orchestrator. Sub-agents are disposable; your job is decomposition, 
 
 **Shard per ITEM, never per dimension.** "Scout 100 companies" = 100 scouts (one each), not 5 scouts doing 20. Small contexts, uniform results, the runtime queues excess items automatically.
 
-**Concurrency reality.** Each workflow runs at most `min(16, CPU cores − 2)` agents simultaneously (e.g. 8-core Mac → 6 slots); the rest queue. This is harness-enforced — the script can't raise it. When wall-clock matters on a big fan-out, split the item list across 2–4 top-level Workflow calls **launched in the same message** — the cap is per workflow, so 3 workflows × 6 slots ≈ 18 concurrent. Don't use nested `workflow()` for this: children share the parent's cap. Measured baseline: 100 trivial haiku agents ≈ 2.5 min at 6 slots.
+**Concurrency reality.** Each workflow runs at most `min(16, CPU cores − 2)` agents simultaneously (e.g. 8-core Mac → 6 slots); the rest queue. This is harness-enforced — the script can't raise it (each agent is a local process; the cap protects the machine). When wall-clock matters on a big fan-out, split the item list across 2–4 top-level Workflow calls **launched in the same message** — the cap is per workflow, so 4 workflows × 6 slots ≈ 24 concurrent. Don't use nested `workflow()` for this: children share the parent's cap. Measured on an 8-core Mac, 100 trivial haiku agents: 1 workflow = 154s; 4 parallel workflows of 25 = 40s (3.8× — near-linear, with per-agent latency creeping up as cores saturate, so past ~4 shards returns diminish). Fixed per-agent overhead is ~6–10s and ~25k prompt tokens (cache-read priced after the first agent) regardless of task size — swarm when shards do real work, not 3-token returns.
 
 ## Hard rules
 
