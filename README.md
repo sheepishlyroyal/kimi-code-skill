@@ -7,11 +7,12 @@ Moonshot's Kimi K2.5/K2.6 ships "Agent Swarm": the model decomposes a task, spaw
 ```
 task ──▶ orchestrator (your session model)
            │  decompose → route → fan out
+           ├─▶ drone  × N   (Haiku)   zero-tool text transforms — cheapest tier
            ├─▶ scout  × N   (Haiku)   lookups, fetches, fact-checks — one per ITEM
            ├─▶ worker × N   (Sonnet)  implementation / analysis shards
            ├─▶ judge  × few (Opus)    adversarial verification, ~1 per 5–10 shards
            │
-           └─◀ structured JSON returns → map-reduce → one synthesized answer
+           └─◀ structured JSON returns → map-reduce → replan failed shards → synthesize
 ```
 
 "Scout 100 companies" = 100 Haiku scouts, one per company. The wide layer (most of the token volume) runs ~15× cheaper than Opus-class models; the expensive models only touch the small, hard slices.
@@ -21,6 +22,7 @@ task ──▶ orchestrator (your session model)
 | Path | What it is |
 |---|---|
 | `skills/swarm/SKILL.md` | The `/swarm` orchestrator: decompose → route → execute → synthesize loop, scale table, anti-patterns (no serial collapse, no swarm-for-swarm's-sake), and a ready-to-adapt Workflow script template |
+| `agents/drone.md` | Haiku, ZERO tools. Pure-text transforms (classify/extract/rewrite) on content pasted into the prompt — smallest bootstrap, fastest tier |
 | `agents/scout.md` | Haiku, read-only. One item per scout, compact sourced findings, 2–5 tool calls |
 | `agents/worker.md` | Sonnet, full tools. Owns one shard, verifies before reporting |
 | `agents/judge.md` | Opus. Default-to-refute verifier; concrete evidence or it doesn't count |
