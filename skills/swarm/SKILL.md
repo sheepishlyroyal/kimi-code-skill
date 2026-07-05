@@ -33,7 +33,9 @@ You are the orchestrator. Sub-agents are disposable; your job is decomposition, 
 | 5–1000 | `Workflow` with `pipeline()` — one agent per ITEM. |
 | >1000 | Batch as last resort; `log()` the batch size so truncation is never silent. |
 
-**Shard per ITEM, never per dimension.** "Scout 100 companies" = 100 scouts (one each), not 5 scouts doing 20. Small contexts, uniform results, the runtime queues past the ~16-concurrent cap automatically.
+**Shard per ITEM, never per dimension.** "Scout 100 companies" = 100 scouts (one each), not 5 scouts doing 20. Small contexts, uniform results, the runtime queues excess items automatically.
+
+**Concurrency reality.** Each workflow runs at most `min(16, CPU cores − 2)` agents simultaneously (e.g. 8-core Mac → 6 slots); the rest queue. This is harness-enforced — the script can't raise it. When wall-clock matters on a big fan-out, split the item list across 2–4 top-level Workflow calls **launched in the same message** — the cap is per workflow, so 3 workflows × 6 slots ≈ 18 concurrent. Don't use nested `workflow()` for this: children share the parent's cap. Measured baseline: 100 trivial haiku agents ≈ 2.5 min at 6 slots.
 
 ## Hard rules
 
