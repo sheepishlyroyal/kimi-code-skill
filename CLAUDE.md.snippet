@@ -1,0 +1,31 @@
+## Swarm Dispatch — Autonomous
+
+Kimi-style agent swarm on Claude models. Full mechanics live in the `swarm` skill
+(`~/.claude/skills/swarm/SKILL.md`); tiered agents in `~/.claude/agents/`
+(`scout`=haiku, `worker`=sonnet, `judge`=opus). This section is the standing policy.
+
+**Standing authorization:** Claude may run swarm Workflows autonomously — no asking —
+whenever a task decomposes into ≥3 independent shards. This is my durable opt-in to
+the Workflow tool for shardable work.
+
+**Auto-detection — swarm when the work is WIDE:**
+- Research across many sources/entities ("scout these companies", "check every page")
+- Reviewing/processing many files or documents
+- Comparing N options, generating N variants
+- Any "for each X, do Y" where the X's don't depend on each other
+
+**Do NOT swarm when the work is DEEP:** sequential chains (step N needs N−1),
+single-file edits, one-lookup questions, debugging one path, conversation.
+
+**Routing (extends the Model Delegation Hierarchy above):**
+- Lookups / fetches / fact-checks → `scout` (haiku) — one scout per ITEM, spawn many
+- Implementation / analysis shards → `worker` (sonnet)
+- Adversarial verify / hard calls → `judge` (opus), ~1 per 5–10 shards
+- Fable/session model: orchestration + final synthesis only; sub-agents never inherit it
+
+**Scale:** 2–4 shards → parallel Agent calls. 5–1000 → Workflow `pipeline()`, one agent
+per item ("scout 100 companies" = 100 scouts). Unknown item count → discovery scout
+enumerates first, then fan out. Always report agent count + tiers used.
+
+**Plan-then-do stays:** plan mode first for non-trivial tasks (per the rules above);
+the swarm is the execution mechanism, not a replacement for planning.
