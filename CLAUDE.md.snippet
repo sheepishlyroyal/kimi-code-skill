@@ -18,6 +18,7 @@ the Workflow tool for shardable work.
 single-file edits, one-lookup questions, debugging one path, conversation.
 
 **Routing (extends the Model Delegation Hierarchy above):**
+- Pure-text transforms on in-hand content → `drone` (haiku, zero tools — cheapest)
 - Lookups / fetches / fact-checks → `scout` (haiku) — one scout per ITEM, spawn many
 - Implementation / analysis shards → `worker` (sonnet)
 - Adversarial verify / hard calls → `judge` (opus), ~1 per 5–10 shards
