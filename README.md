@@ -1,4 +1,4 @@
-# claude-swarm
+# kimi-code-skill
 
 Kimi-style agent swarm for [Claude Code](https://claude.com/claude-code) — with Claude models.
 
@@ -31,8 +31,8 @@ task ──▶ orchestrator (your session model)
 ## Install
 
 ```bash
-git clone https://github.com/sheepishlyroyal/claude-swarm
-cd claude-swarm
+git clone https://github.com/sheepishlyroyal/kimi-code-skill
+cd kimi-code-skill
 mkdir -p ~/.claude/skills/swarm ~/.claude/agents
 cp skills/swarm/SKILL.md ~/.claude/skills/swarm/
 cp agents/*.md ~/.claude/agents/
